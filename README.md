@@ -99,3 +99,21 @@ The objective of TrustVault is to demonstrate how a web application can combine 
 ## 👩‍💻 Author
 
 Developed as a security-focused web development project using Python and Flask.
+
+## Security Testing
+
+The following security tests were performed on the local application:
+
+| Test | Expected Result | Status |
+|---|---|---|
+| Unsupported file upload (`.exe`) | File rejected | PASS |
+| File larger than 5 MB | Request rejected | PASS |
+| Unauthorized document download | Access denied with 404 response | PASS |
+
+### File Upload Restrictions
+- Allowed file types: PDF, TXT, PNG, JPG, JPEG.
+- Maximum request size: 5 MB.
+- Passwords are hashed before being stored.
+- Document downloads are restricted to the document owner.
+
+*Note: These tests were performed locally. Passing these tests does not guarantee complete application security.*
