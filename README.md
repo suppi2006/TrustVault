@@ -43,29 +43,16 @@ Maximum upload size: **5 MB**
 
 ### 1. Clone the repository
 
-```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
-```
-
-Replace `YOUR_GITHUB_REPOSITORY_URL` with your actual GitHub repository URL.
+git clone https://github.com/suppi2006/TrustVault.git
 
 ### 2. Open the project folder
 
-```bash
-cd YOUR_PROJECT_FOLDER
-```
+cd TrustVault
 
 ### 3. Install dependencies
 
-```bash
-pip install flask
-```
-
-If your project contains a `requirements.txt` file, install the listed dependencies instead:
-
-```bash
 pip install -r requirements.txt
-```
+
 
 ### 4. Start the application
 
