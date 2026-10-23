@@ -1,36 +1,34 @@
 # 🔐 TrustVault – Secure Document Sharing
 
-## 📌 About the Project
+## About the Project
 
-TrustVault is a secure document-sharing web application built using Python and Flask. It allows registered users to upload, view, and download their documents while restricting access to documents owned by other users.
+TrustVault is a Python and Flask web application that allows registered users to upload and download their own documents. Server-side ownership checks prevent users from downloading documents belonging to other accounts.
 
-The project focuses on authentication, document access control, and secure file handling.
+The project demonstrates authentication, document access control, CSRF protection, and basic security testing.
 
-## ✨ Features
+## Features
 
 - User registration and login
-- Password hashing for secure password storage
-- CSRF protection for form submissions
-- Secure document upload
-- File extension validation
-- Maximum upload size of 5 MB
-- Private document storage
-- User-specific document access
+- Password hashing
+- CSRF token validation for supported form submissions
+- Private document uploads
+- Server-side document ownership checks
 - Protected document downloads
-- Session cookie security settings
+- File extension restrictions
+- Maximum upload size of 5 MB
 - SQLite database integration
+- Audit logging for document uploads and downloads
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - **Backend:** Python, Flask
 - **Frontend:** HTML, CSS
 - **Database:** SQLite
-- **Security:** Password hashing, CSRF protection, access control
+- **Testing:** pytest
 - **Tools:** Visual Studio Code, Git, GitHub
+- **Deployment:** Render
 
-## 📂 Supported File Types
-
-TrustVault currently allows the following file extensions:
+## Supported File Types
 
 - PDF (`.pdf`)
 - Text (`.txt`)
@@ -39,68 +37,103 @@ TrustVault currently allows the following file extensions:
 
 Maximum upload size: **5 MB**
 
-## ⚙️ How to Run the Project
+## Run Locally
 
 ### 1. Clone the repository
 
+```bash
 git clone https://github.com/suppi2006/TrustVault.git
-
-### 2. Open the project folder
-
 cd TrustVault
+```
+
+### 2. Create and activate a virtual environment
+
+Windows PowerShell:
+
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+```
+
+If PowerShell blocks activation, use:
+
+```powershell
+.\venv\Scripts\python.exe -m pip install -r requirements.txt
+```
 
 ### 3. Install dependencies
 
-pip install -r requirements.txt
+```bash
+python -m pip install -r requirements.txt
+python -m pip install pytest
+```
 
+### 4. Configure the application
 
-### 4. Start the application
+Set a strong secret key using an environment variable before running the application. Do not commit real secrets to GitHub.
+
+Windows PowerShell example:
+
+```powershell
+$env:SECRET_KEY = "replace-with-a-long-random-secret"
+```
+
+For production, configure environment variables and secure cookie settings in the deployment environment.
+
+### 5. Start the application
 
 ```bash
 python app.py
 ```
 
-### 5. Open in your browser
+Open [http://127.0.0.1:5000/](http://127.0.0.1:5000/) in your browser.
 
-Visit:
+## Automated Tests
 
-http://127.0.0.1:5000/
+Run the automated tests with:
 
-Register an account or log in to start using TrustVault.
+```bash
+python -m pytest test_app.py -v
+```
 
-## 🔒 Security Measures
+The current local test suite contains six tests covering:
 
-- Passwords are stored using password hashing.
-- CSRF tokens help protect supported forms against cross-site request forgery.
-- Download requests verify that the document belongs to the logged-in user.
+- Login page availability
+- Dashboard authentication requirement
+- Password hash storage
+- Invalid CSRF token rejection
+- Incorrect password rejection
+- Prevention of cross-user document downloads
+
+**Latest recorded local result:** 6 tests passed.
+
+Additional manual checks were performed for unsupported file uploads and files larger than the 5 MB limit.
+
+## Security Measures
+
+- Passwords are stored as hashes.
+- CSRF tokens are validated on supported form submissions.
+- Download queries check both the document ID and the authenticated user's ID.
 - Unsupported file extensions are rejected.
-- Uploaded files are stored in a private upload directory.
-- Session cookie settings help protect session information.
+- Uploaded files use generated storage names.
+- Upload and download events are recorded in audit logs.
+- Session cookie settings include HTTP-only and SameSite protections.
 
-**Note:** File extension checks alone do not verify the actual contents of an uploaded file. Further content validation and production security testing may be needed.
+## Known Limitations
 
-## 🎯 Project Objective
+- Role-based access and configurable document-sharing permissions are not implemented.
+- File extensions are checked, but actual file contents are not fully validated.
+- Malware scanning, rate limiting, and account lockout are not implemented.
+- Audit events are recorded, but a user-facing audit log viewer is not implemented.
+- The current SQLite database and local upload storage may not persist across deployment restarts or redeployments on an ephemeral hosting filesystem.
+- Production security and deployment configuration require further review.
 
-The objective of TrustVault is to demonstrate how a web application can combine user authentication, document management, database operations, and access control to support secure document sharing.
+These limitations mean the project is a learning and demonstration application, not a fully production-hardened document storage service.
 
-## 👩‍💻 Author
+## Project Objective
+
+TrustVault demonstrates how authentication, database operations, file handling, and server-side access control can be combined to protect users' private documents.
+
+## Author
 
 Developed as a security-focused web development project using Python and Flask.
-
-## Security Testing
-
-The following security tests were performed on the local application:
-
-| Test | Expected Result | Status |
-|---|---|---|
-| Unsupported file upload (`.exe`) | File rejected | PASS |
-| File larger than 5 MB | Request rejected | PASS |
-| Unauthorized document download | Access denied with 404 response | PASS |
-
-### File Upload Restrictions
-- Allowed file types: PDF, TXT, PNG, JPG, JPEG.
-- Maximum request size: 5 MB.
-- Passwords are hashed before being stored.
-- Document downloads are restricted to the document owner.
-
-*Note: These tests were performed locally. Passing these tests does not guarantee complete application security.*
